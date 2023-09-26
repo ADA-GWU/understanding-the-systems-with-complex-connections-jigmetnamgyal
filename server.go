@@ -1,1 +1,13 @@
-package understanding_the_systems_with_complex_connections_jigmetnamgyal
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: server <port>")
+		os.Exit(1)
+	}
+}
