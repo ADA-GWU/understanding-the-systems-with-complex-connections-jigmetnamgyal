@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -22,6 +23,66 @@ func main() {
 		err := listener.Close()
 		if err != nil {
 			fmt.Println("Error closing the listener with error: ", err)
+			os.Exit(1)
 		}
 	}(listener)
+
+	fmt.Println("Server Listening on port: " + port)
+
+	for {
+		connection, err := listener.Accept()
+
+		if err != nil {
+			fmt.Println("Error accepting connection: ", err)
+			continue
+		}
+
+		go handleClient(connection)
+	}
+}
+
+func handleClient(conn net.Conn) {
+	defer func(conn net.Conn) {
+		err := conn.Close()
+		if err != nil {
+			fmt.Println("Error closing the listener with error: ", err)
+			os.Exit(1)
+		}
+	}(conn)
+
+	buffer := make([]byte, 1024)
+
+	for {
+		n, err := conn.Read(buffer)
+		if err != nil {
+			fmt.Println("Error reading:", err)
+			os.Exit(1)
+		}
+
+		data := string(buffer[:n])
+		inputNumber, err := strconv.Atoi(data)
+
+		if err != nil {
+			fmt.Println("Invalid input. Please enter a number.")
+			_, err := conn.Write([]byte("Invalid input. Please enter a number.\n"))
+
+			if err != nil {
+				fmt.Println("Error writing:", err)
+				os.Exit(1)
+			}
+			continue
+		}
+
+		result := doubleNumber(inputNumber)
+		_, writeError := conn.Write([]byte(fmt.Sprintf("Result: %d\n", result)))
+
+		if writeError != nil {
+			fmt.Println("Error writing:", writeError)
+			os.Exit(1)
+		}
+	}
+}
+
+func doubleNumber(number int) int {
+	return number * 2
 }
