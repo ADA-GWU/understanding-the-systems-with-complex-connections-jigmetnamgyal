@@ -29,5 +29,18 @@ func main() {
 			fmt.Println("Error connecting to the server:", err)
 			continue
 		}
+
+		// Send input to the server
+		_, err = conn.Write([]byte(input))
+
+		if err != nil {
+			fmt.Println("Error sending data to the server:", err)
+			err := conn.Close()
+			if err != nil {
+				fmt.Println("Error closing", err)
+				os.Exit(1)
+			}
+			continue
+		}
 	}
 }
