@@ -36,7 +36,7 @@ func main() {
 	var serverLists []ServerList
 
 	for i := 0; i < convertedInput; i++ {
-		fmt.Println("List the server address #" + string(rune(i)))
+		fmt.Println("List the server address #" + strconv.Itoa(i+1))
 
 		var ServerAddress string
 		_, addressErr := fmt.Scanln(&ServerAddress)

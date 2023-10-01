@@ -74,7 +74,7 @@ func handleClient(port string, conn net.Conn) {
 		}
 
 		result := doubleNumber(inputNumber)
-		_, writeError := conn.Write([]byte(fmt.Sprintf("Result from server port: %s %d\n", port, result)))
+		_, writeError := conn.Write([]byte(fmt.Sprintf("Result from server port(%s) = %d\n", port, result)))
 
 		if writeError != nil {
 			fmt.Println("Error writing:", writeError)
