@@ -8,12 +8,16 @@ import (
 )
 
 func main() {
+	// Check if the correct number of command-line arguments is provided
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: server <port>")
 		os.Exit(1)
 	}
 
+	// Get the port number from the command-line argument
 	port := os.Args[1]
+
+	// Listen on the specified port for incoming connections
 	listener, err := net.Listen("tcp", "localhost:"+port)
 
 	if err != nil {
@@ -31,6 +35,7 @@ func main() {
 	fmt.Println("Server Listening on port: " + port)
 
 	for {
+		// Accept incoming connections
 		connection, err := listener.Accept()
 
 		if err != nil {
@@ -38,6 +43,7 @@ func main() {
 			continue
 		}
 
+		// Handle each client connection in a separate goroutine
 		go handleClient(port, connection)
 	}
 }

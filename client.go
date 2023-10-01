@@ -35,6 +35,7 @@ func main() {
 
 	var serverLists []ServerList
 
+	// Collect server information from the user for the specified number of servers
 	for i := 0; i < convertedInput; i++ {
 		fmt.Println("List the server address #" + strconv.Itoa(i+1))
 
@@ -75,6 +76,7 @@ func main() {
 
 		randServer := returnRandomServer(serverLists)
 
+		// Connect to the randomly selected server
 		conn, err := net.Dial("tcp", randServer.ServerAddress+":"+randServer.ServerPort)
 		if err != nil {
 			fmt.Println("Error connecting to the server:", err)
@@ -117,6 +119,7 @@ func main() {
 	}
 }
 
+// returnRandomServer returns a randomly selected server from the list.
 func returnRandomServer(serverLists []ServerList) ServerList {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	randomIndex := r.Intn(len(serverLists))
