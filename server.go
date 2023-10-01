@@ -38,11 +38,11 @@ func main() {
 			continue
 		}
 
-		go handleClient(connection)
+		go handleClient(port, connection)
 	}
 }
 
-func handleClient(conn net.Conn) {
+func handleClient(port string, conn net.Conn) {
 	defer func(conn net.Conn) {
 		err := conn.Close()
 		if err != nil {
@@ -74,7 +74,7 @@ func handleClient(conn net.Conn) {
 		}
 
 		result := doubleNumber(inputNumber)
-		_, writeError := conn.Write([]byte(fmt.Sprintf("Result: %d\n", result)))
+		_, writeError := conn.Write([]byte(fmt.Sprintf("Result from server port: %s %d\n", port, result)))
 
 		if writeError != nil {
 			fmt.Println("Error writing:", writeError)
