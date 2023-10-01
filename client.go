@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -41,6 +42,27 @@ func main() {
 				os.Exit(1)
 			}
 			continue
+		}
+
+		// Receive and print the result from the server
+		result := make([]byte, 1024)
+		_, err = conn.Read(result)
+		if err != nil {
+			fmt.Println("Error receiving data from the server:", err)
+			err := conn.Close()
+			if err != nil {
+				fmt.Println("Error closing", err)
+				os.Exit(1)
+			}
+			continue
+		}
+
+		fmt.Println(strings.TrimSpace(string(result)))
+
+		ConnErr := conn.Close()
+		if ConnErr != nil {
+			fmt.Println("Error closing", ConnErr)
+			os.Exit(1)
 		}
 	}
 }
