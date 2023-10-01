@@ -2,19 +2,68 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
+type ServerList struct {
+	ServerAddress string
+	ServerPort    string
+}
+
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Println("Usage: client <server_address> <server_port>")
+
+	fmt.Println("List the no of server: ")
+
+	var noOfServer string
+	_, err := fmt.Scanln(&noOfServer)
+
+	if err != nil {
+		fmt.Println("Error Scanning: ", err)
 		os.Exit(1)
 	}
 
-	serverAddr := os.Args[1]
-	serverPort := os.Args[2]
+	convertedInput, err := strconv.Atoi(noOfServer)
+
+	if err != nil {
+		fmt.Println("Error in converting string to int: ", err)
+		os.Exit(1)
+	}
+
+	var serverLists []ServerList
+
+	for i := 0; i < convertedInput; i++ {
+		fmt.Println("List the server address: ")
+
+		var ServerAddress string
+		_, addressErr := fmt.Scanln(&ServerAddress)
+
+		if addressErr != nil {
+			fmt.Println("Error Scanning: ", addressErr)
+			os.Exit(1)
+		}
+
+		fmt.Println("List the server port: ")
+
+		var ServerPort string
+		_, portErr := fmt.Scanln(&ServerPort)
+
+		if portErr != nil {
+			fmt.Println("Error Scanning: ", portErr)
+			os.Exit(1)
+		}
+
+		serverLists = append(serverLists, ServerList{
+			ServerAddress,
+			ServerPort,
+		})
+	}
+
+	fmt.Println(serverLists)
 
 	for {
 		fmt.Println("Enter a number: ")
@@ -25,7 +74,9 @@ func main() {
 			os.Exit(1)
 		}
 
-		conn, err := net.Dial("tcp", serverAddr+":"+serverPort)
+		randServer := returnRandomServer(serverLists)
+
+		conn, err := net.Dial("tcp", randServer.ServerAddress+":"+randServer.ServerPort)
 		if err != nil {
 			fmt.Println("Error connecting to the server:", err)
 			continue
@@ -65,4 +116,13 @@ func main() {
 			os.Exit(1)
 		}
 	}
+}
+
+func returnRandomServer(serverLists []ServerList) ServerList {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomIndex := r.Intn(len(serverLists))
+
+	randomServer := serverLists[randomIndex]
+
+	return randomServer
 }

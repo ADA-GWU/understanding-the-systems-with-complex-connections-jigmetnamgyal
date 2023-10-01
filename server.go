@@ -14,7 +14,8 @@ func main() {
 	}
 
 	port := os.Args[1]
-	listener, err := net.Listen("tcp", "localhost"+port)
+	listener, err := net.Listen("tcp", "localhost:"+port)
+
 	if err != nil {
 		fmt.Println("Error listening to port: ", err)
 	}
