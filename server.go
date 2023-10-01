@@ -24,7 +24,7 @@ func main() {
 		err := listener.Close()
 		if err != nil {
 			fmt.Println("Error closing the listener with error: ", err)
-			os.Exit(1)
+			return
 		}
 	}(listener)
 
@@ -56,8 +56,7 @@ func handleClient(conn net.Conn) {
 	for {
 		n, err := conn.Read(buffer)
 		if err != nil {
-			fmt.Println("Error reading:", err)
-			os.Exit(1)
+			return
 		}
 
 		data := string(buffer[:n])
@@ -69,7 +68,7 @@ func handleClient(conn net.Conn) {
 
 			if err != nil {
 				fmt.Println("Error writing:", err)
-				os.Exit(1)
+				return
 			}
 			continue
 		}
@@ -79,7 +78,7 @@ func handleClient(conn net.Conn) {
 
 		if writeError != nil {
 			fmt.Println("Error writing:", writeError)
-			os.Exit(1)
+			return
 		}
 	}
 }

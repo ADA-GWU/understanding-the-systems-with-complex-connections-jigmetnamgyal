@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -24,14 +23,14 @@ func main() {
 
 	if err != nil {
 		fmt.Println("Error Scanning: ", err)
-		os.Exit(1)
+		return
 	}
 
 	convertedInput, err := strconv.Atoi(noOfServer)
 
 	if err != nil {
 		fmt.Println("Error in converting string to int: ", err)
-		os.Exit(1)
+		return
 	}
 
 	var serverLists []ServerList
@@ -44,7 +43,7 @@ func main() {
 
 		if addressErr != nil {
 			fmt.Println("Error Scanning: ", addressErr)
-			os.Exit(1)
+			return
 		}
 
 		fmt.Println("List the server port: ")
@@ -54,7 +53,7 @@ func main() {
 
 		if portErr != nil {
 			fmt.Println("Error Scanning: ", portErr)
-			os.Exit(1)
+			return
 		}
 
 		serverLists = append(serverLists, ServerList{
@@ -71,7 +70,7 @@ func main() {
 		_, err := fmt.Scanln(&input)
 		if err != nil {
 			fmt.Println("Error Scanning: ", err)
-			os.Exit(1)
+			return
 		}
 
 		randServer := returnRandomServer(serverLists)
@@ -90,7 +89,7 @@ func main() {
 			err := conn.Close()
 			if err != nil {
 				fmt.Println("Error closing", err)
-				os.Exit(1)
+				return
 			}
 			continue
 		}
@@ -103,7 +102,7 @@ func main() {
 			err := conn.Close()
 			if err != nil {
 				fmt.Println("Error closing", err)
-				os.Exit(1)
+				return
 			}
 			continue
 		}
@@ -113,7 +112,7 @@ func main() {
 		ConnErr := conn.Close()
 		if ConnErr != nil {
 			fmt.Println("Error closing", ConnErr)
-			os.Exit(1)
+			return
 		}
 	}
 }
